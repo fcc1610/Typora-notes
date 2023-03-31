@@ -1,0 +1,314 @@
+[TOC]
+
+### 时间复杂度（Time Complexity）
+
+算法的 *“执行时间”* 和 *输入问题规模* 之间的关系
+
+- 执行时间：不是实际的时间
+
+- 输入问题规模：具体问题具体分析
+
+  ![image-20230213202534336](https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230213202534336.png)
+
+### 链表（Linked List）
+
+- 由结点构成的列表
+
+- 线性的数据结构
+
+  java自带的链表LinkedList不常用。
+
+```java
+class ListNode(){
+	public ElementType val;
+    public ListNode next;
+}
+```
+
+#### 链表的操作
+
+- 遍历(traverse)
+
+- 插入(insert)
+
+- 查找(find)
+
+- 删除(delete)
+
+- 更新(update)
+
+
+
+#### 遍历(traverse)
+
+```java
+//初始化：
+ListNode node1 = new ListNode(1);
+ListNode node2 = new ListNode(3);
+ListNode node3 = new ListNode(5);
+ListNode node4 = new ListNode(7);
+
+node1.next = node2;
+node2.next = node3;
+node3.next = node4;
+
+ListNode cur = node1;
+while(cur != null){
+    System.out.print(cur.val+" ");
+    cur = cur.next;
+}
+```
+
+#### 插入(insert)
+
+```java
+public void add(int location,int val){
+    ListNode node = new ListNode(val);
+    if(location > 0){
+        ListNode pre = head;
+        for(int i = 0;i < location - 1;i++){
+            pre = pre.next;
+        }
+        node.next = pre.next;
+        pre.next = node;
+    }else if(location == 0){
+        node.next = head;
+        head = node;
+    }
+}
+```
+
+#### 查找(find)
+
+```java
+public ListNode find(int location){
+    ListNode node = head;
+    for(int i = 0;i < location;i++){
+        node = node.next;
+    }
+    return node;
+}
+```
+
+#### 删除(delete)
+
+```java
+public int remove(int location){
+    ListNode pre = head;
+	if(location > 0){
+        for(int i = 0;i < location - 1;i++){
+        	pre = pre.next;
+    	}
+        pre.next = pre.next.next;
+    }else if(location == 0){
+        head = head.next;
+    }
+}
+```
+
+#### 更新(update)
+
+```java
+public void update(int location,int value){
+    ListNode node = head;
+    for(int i = 0;i < location;i++){
+        node = node.next;
+    }
+    node.val = value;
+}
+```
+
+#### 哑结点(Dummy Node)
+
+- 在整个链表前插一个哨兵节点
+- 使得对于链表头结点 和 链表中间结点 操作逻辑相同
+
+```java
+ListNode dummy = new ListNode();
+dummy.next = head;
+```
+
+
+
+
+
+
+
+------
+
+### 栈（Stack）
+
+#### 栈的操作
+
+- push
+
+- pop
+
+- peek
+
+- isEmpty()
+
+  
+
+#### 栈的实现
+
+- linked list：用链表的头结点当作栈顶
+
+```java
+public class MyStack {
+    private ListNode head;
+
+    public void push(int val){
+        ListNode newHead = new ListNode(val);
+        newHead.next = head;
+        head = newHead;
+    }
+
+    public int pop(){
+        if(isEmpty()){
+            throw new NoSuchElementException();
+        }
+        int a = head.val;
+        head = head.next;
+        return a;
+    }
+
+    public int peek(){
+        if(isEmpty()){
+            throw new NoSuchElementException();
+        }
+        return head.val;
+    }
+
+    public boolean isEmpty(){
+        return head == null;
+    }
+
+    public void clear(){
+        head = null;
+    }
+
+}
+```
+
+
+
+#### Java提供的栈
+
+```java
+public static void main(String[] args) {
+    Stack<Integer> stack = new Stack<>();
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+
+    while(!stack.isEmpty()){
+        System.out.println(stack.peek());
+        stack.pop();
+    }
+}
+```
+
+
+
+
+
+
+
+------
+
+### 队列（Queue）
+
+#### 队列的操作
+
+- enqueque(val)
+
+- dequeue()
+
+- size():
+
+- is_empty():
+
+  ![image-20230222222213920](https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230222222213920.png) 
+
+#### 队列的实现
+
+- linked list
+
+```java
+public class MyQueue {
+    private ListNode head;
+    private ListNode tail;
+
+    public void offer(int val){
+        //即队列为空（head，tail都是null）
+        if(tail == null){
+            head = tail = new ListNode(val);
+        } else{
+            tail.next = new ListNode(val);
+            tail = tail.next;
+        }
+    }
+
+    public int poll(){
+        if (isEmpty()){
+            throw new NoSuchElementException();
+        }
+        int ret = head.val;
+        head = head.next;
+        if(head == null){
+            tail = null;
+        }
+        return ret;
+    }
+
+    public int peek(){
+        if(isEmpty()){
+            throw new NoSuchElementException();
+        }
+        return tail.val;
+    }
+
+    public boolean isEmpty(){
+        return head == null;
+    }
+
+    public void clear(){
+        head = tail = null;
+    }
+
+}
+
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val){
+        this.val = val;
+    }
+}
+```
+
+
+
+#### Java提供的队列
+
+```java
+Queue<Integer> queue = new LinkedList<>();
+queue.offer(1);
+queue.offer(2);
+queue.offer(3);
+
+while(!queue.isEmpty()){
+    System.out.print(queue.peek() + " ");
+    queue.poll();
+}
+```
+
+#### 队列的应用
+
+- message queue
+
+
+
+
+

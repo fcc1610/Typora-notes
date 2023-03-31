@@ -1,0 +1,566 @@
+[TOC]
+
+
+
+### 时间复杂度（Time Complexity）
+
+算法的 *“执行时间”* 和 *输入问题规模* 之间的关系
+
+- 执行时间：不是实际的时间
+
+- 输入问题规模：具体问题具体分析
+
+  ![image-20230213202534336](https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230213202534336.png)
+
+------
+
+
+
+### *链表(Linked List)*
+
+| 遍历 |                   |
+| ---- | ----------------- |
+| 插入 | add(location,val) |
+| 查找 | get(location)     |
+| 更新 | set(location,val) |
+| 删除 | remove(location)  |
+
+
+
+#### 遍历(traverse)
+
+```python
+cur = node_1
+while cur is not None:
+    	print(cur.val,end=' ')
+        cur = cur.next
+```
+
+##### quiz: 
+
+改变结点指向，观察遍历输出结果是否改变
+
+```
+node_1 = ListNode(1)
+node_2 = ListNode(3)
+node_3 = ListNode(5)
+node_4 = ListNode(7)
+
+node1.next = node_2
+node2.next = node_3
+node3.next = node_4
+
+node2 = node3
+
+cur = node1
+while cur is not None:
+	print(cur.val,end=‘ ’)
+    cur = cur.next
+```
+
+![image-20230213152850883](https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230213152850883.png)
+
+输出结果不变，为1 3 5 7
+
+#### 插入(insert)
+
+```python
+def add(self,location,val):
+	if location > 0
+		for i in range(location - i):
+			pre = pre.next
+        new_node = ListNode(val)
+        new_node.next = pre.next
+        pre.next = new_node
+	elif location == 0
+		new_node = ListNode(val)
+        new_node.next = self.head
+        self.head = new_node
+```
+
+#### 查找
+
+```python
+def get(self,location):
+	cur = self.head
+	for i in range(location):
+		cur = cur.next
+	return cur.val
+```
+
+#### 修改
+
+```python
+def set(self,location,val):
+	cur = self.head
+	for i in range(location):
+		cur = cur.next
+	cur.val = val;
+```
+
+#### 删除
+
+```python
+def remove(self,location):
+	if(location > 0):
+		pre = self.head
+		for i in range (location - 1):
+			pre = pre.next
+			
+			pre.next = pre.next.next
+			
+	elif(location == 0):
+		self.head = self.head.next;
+```
+
+#### 判空
+
+```python
+def if_empty(self):
+	return self.head is None
+```
+
+#### 练习
+
+删除链表中倒数第n个结点
+
+```python
+def remove_nth_from_end(self, head: ListNode, n: int) -> ListNode:
+        # write your code here   
+        node2 = node1 = head
+        for i in range(n):
+            node1 = node1.next
+        # 1 -> null , 1 的情况
+        if (node2 == head and node1 is None):
+            return head.next
+
+        while node1.next:
+            node1 = node1.next
+            node2 = node2.next
+            
+        node2.next = node2.next.next
+        return head
+```
+
+为克服要删除的结点是第一个结点的情况，在head前添加一个哑结点dummy，指向head。
+
+```python
+    def remove_nth_from_end(self, head: ListNode, n: int) -> ListNode:
+        # write your code here
+        dummy = ListNode(0, head)
+        first = head
+        second = dummy
+        for i in range (n):
+            first = first.next
+        while first:
+            first = first.next
+            second = second.next
+        second.next = second.next.next
+        return dummy.next
+```
+
+
+
+
+
+------
+
+### *栈（Stack）*
+
+#### 栈的操作
+
+- push(val)
+
+- pop
+
+- peek() ：查看栈顶值
+
+- is_empty()
+
+  
+
+#### 栈的实现
+
+- 基于list实现stack
+- list的尾部相当于stack的栈顶
+
+![image-20230222222337056](https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230222222337056.png)
+
+```python
+class MyStack:
+    """使用List模拟栈"""
+
+    def __init__(self):
+        self.items = []
+
+    def is_empty(self):
+        return not self.items
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        return self.items.pop()
+
+    def peek(self):
+        return self.items[-1]
+
+    def size(self):
+        return len(self.items)
+
+
+if __name__ == '__main__':
+    my_stack = MyStack()
+    for i in range(10):
+        my_stack.push(i)
+
+    while not my_stack.is_empty():
+        print(my_stack.pop(), end=' ')
+    print()
+```
+
+
+
+#### quiz 423
+
+whether the string is a valid parentheses
+
+```python
+    def is_valid_parentheses(self, s: str) -> bool:
+        # write your code here
+
+        # 输入："([)]"
+        # 输出：False
+
+        # 输入："([]{})"
+        # 输出：True
+        stack = []
+
+        for i in range(len(s)):
+            ch = s[i]
+            if ch == '(' or ch == '[' or ch == '{':
+                stack.append(ch)
+            else:
+                if not stack:
+                    return False
+                if ch == ')' and stack[-1] != '(' or
+                ch == ']' and stack[-1] != '['or
+                ch == '}' and stack[-1] != '{':
+                    return False
+                    
+                stack.pop()
+
+
+        return not stack
+```
+
+
+
+#### 栈的应用
+
+- 调用栈 （Call Stack）
+  - 操作系统用来保存函数的状态
+
+
+
+
+
+------
+
+### *队列（Queue）*
+
+#### 队列的操作
+
+- enqueque(val): 进队列
+- dequeue():   出队列
+- size(): 队列中元素个数
+- is_empty(): 队列是否为空
+
+![image-20230222222213920](https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230222222213920.png) 
+
+#### 队列的实现
+
+- 使用LinkedList实现队列（ 为什么不用List? ）（ 因为List在头部操作需要O(n) ）
+- 使用queue模块（python具有队列模块）
+
+![image-20230222222240821](https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230222222240821.png) 
+
+```python
+class ListNode:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+class MyQueue:
+    """使用Linked List模拟队列"""
+    def __init__(self):
+        self.count = 0
+        self.head = None
+        self.tail = None
+
+    def enqueue(self, value):
+        node = ListNode(value)
+        if self.head is None:
+            self.head = node
+            self.tail = node
+        else:
+            self.tail.next = node
+            self.tail = node
+        self.count += 1
+
+    def dequeue(self):
+        if self.head is None:
+            raise Exception('This is a empty queue')
+        cur = self.head
+        self.head = cur.next
+        self.count -= 1
+        return cur.value
+
+    def is_empty(self):
+        return self.head is None
+
+    def size(self):
+        return self.count
+
+if __name__ == '__main__':
+    my_queue = MyQueue()
+    for i in range(10):
+        my_queue.enqueue(i)
+
+    for i in range(10):
+        print(my_queue.dequeue(), end=' ')
+```
+
+
+
+#### python中提供的队列模块
+
+```python
+from queue import Queue
+
+que = Queue(maxsize=100)
+
+for i in range(20):
+    que.put(i)
+
+print(que.qsize())
+
+while not que.empty():
+    print(que.get())
+```
+
+
+
+
+
+------
+
+### *树*（tree）
+
+> 一种用来表示层次关系的非线性数据结构
+
+
+
+#### 二叉树（Binary tree）
+
+叶子节点：没有孩子的结点
+
+![image-20230225093617276](https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230225093617276.png) 
+
+
+
+##### 二叉树的构建
+
+- 先建立单个结点
+- 将结点连接起来  	    
+
+```Python
+class TreeNode:
+	def __init__(self.val):
+		self.val = val
+		self.left = None
+		self.right = None
+        
+    def build_tree():
+        node_1 = TreeNode(8)
+        node_2 = TreeNode(2)
+        node_1.left = node_2
+        
+        return node_1
+```
+
+
+
+##### 二叉树的深度优先遍历
+
+###### 	子树（sub-tree）:
+
+> 树中的每个结点代表以它为根的一棵树
+>
+> 左孩子代表的树称为左子树（left sub-tree）
+>
+> 右孩子代表的树称为右子树（right sub-tree）
+
+​	
+
+###### 	递归:
+
+> - 终止条件（End Case）   
+>
+> - 最基本情况（Base Case）
+>
+>   <img src="https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230225095423522.png" alt="image-20230225095423522" style="zoom:80%;" /> 
+
+```python
+def traverse_tree(root):
+	if root is None:
+		return
+		
+	print(root.val)
+	traverse_tree(root.left)
+	traverse_tree(root.right)
+```
+
+> traverse_tree(3):
+>
+> <img src="https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230225104234971.png" alt="image-20230225104234971" style="zoom: 67%;" /> <img src="https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230225104359963.png" alt="image-20230225104359963"  />
+
+ 
+
+###### 分类：
+
+> 先序（preorder）	root-left-root
+>
+> 中序（inorder）		left-root-right
+>
+> 后序（postorder）	left-right-root
+
+​	
+
+
+
+#### **递归（Recursive）**
+
+
+
+##### 概念：
+
+ - 数据结构的递归：树就是一种递归的数据结构。
+ - 算法（程序）递归：函数自己调用自己。
+
+> 递归不是一个算法，是一种程序的写法。
+>
+> <img src="https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230225110648966.png" alt="image-20230225110648966" style="zoom:67%;" /> 
+
+ 
+
+##### 递归三要素：
+
+- 递归的定义：首先这个问题或者数据结构需要是递归定义的、
+- 递归的出口：什么时候终止。
+- 递归的拆解：递归不终止的时候，如何解决问题。
+
+斐波那契数列：
+
+- 定义：F(n) = F(n - 1) + F(n - 2)
+- 出口：n = 0 和 n = 1时，问题规模足够小
+- 拆解：self.fibonacci(n - 1) + self.fibonacci(n - 2)
+
+但用递归做斐波那契数列，容易超时，因为每个F(n)都会重复计算它的前两个值。
+
+循环方法解决斐波那契数列即可。
+
+
+
+##### 递归的复杂度
+
+- 时间复杂度：函数调用的次数 * 每次函数调用的时间消耗
+- 空间复杂度：堆空间（定义列表等） + 栈空间（递归）
+
+二叉树深度优先遍历：
+
+- 时间复杂度：
+  - 函数会执行2n + 1次(   **n**  +  **n+1**   )( n 为结点数量，n+1 为 none 的数量)
+  - O(n)
+
+- 空间复杂度：
+
+  - 程序最多占用的空间与树的高度成线性关系（最深的）<img src="https://typora-fcc.oss-cn-beijing.aliyuncs.com/pictures-PicGo/image-20230225115837422.png" alt="image-20230225115837422" style="zoom: 67%;" /> 
+  - 算法的空间复杂度为 O (h)   （ h 位于 logn 和 n 之间）
+
+  
+
+
+
+##### Quiz 423
+
+Binary Tree Leaf Sum：Given a binary tree，calculate the sum of the leaves.
+
+```python
+class Solution:
+    def leafSum(self,root):
+        self.res = 0
+        helper(root)
+        return self.res
+    
+    def helper(self,root):
+        if not root:
+            return
+        if not root.left and not root.right:
+            self.res += root.value
+        helper(root.left)
+    	helper(root.right)
+```
+
+##### Quiz 97
+
+Given a binary tree,find its maximum depth.
+
+```python
+class Solution:
+    def maxDepth(self, root):
+        self.res = 0
+        self.helper(root, 1)
+        return self.res
+        
+  	def helper(self, root, height):
+        if root is None:
+            return
+        
+        self.res = max(self.res, height)
+        self.helper(root.left, height + 1)
+        self.helper(root,right, height + 1)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
